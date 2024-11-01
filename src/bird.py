@@ -25,9 +25,7 @@ class Bird:
     def fly(self, keys):
         # Handle jump with cooldown
         if keys[pygame.K_SPACE] and self.cooldown <= 0:
-            self.velocity = self.jump_strength  # Apply upward force
-            self.cooldown = self.cooldown_time  # Reset cooldown timer
-            pygame.mixer.Sound.play(self.wing_sfx)
+            self.tap()
 
         # Apply gravity to velocity
         self.velocity += self.gravity
@@ -36,7 +34,14 @@ class Bird:
         # Update cooldown if it's active
         if self.cooldown > 0:
             self.cooldown -= 1
-        
+    
+    def tap(self):
+        # Ensure not to go out of the screen
+        if self.rect.top > self.image.get_height()*10:
+            self.velocity = self.jump_strength  # Apply upward force
+            self.cooldown = self.cooldown_time  # Reset cooldown timer
+            #pygame.mixer.Sound.play(self.wing_sfx)
+
     def animate(self):
         current_texture_index = int(self.texture_index)
         
