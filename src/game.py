@@ -2,9 +2,6 @@ import pygame
 from random import randint
 from pipe import Pipe
 from bird import Bird
-from time import sleep
-import numpy as np
-from PIL import Image
 class Game:
     def __init__(self, screen_width=400, screen_height=600):
         pygame.init()
@@ -12,6 +9,8 @@ class Game:
         self.screen_width,self.screen_height = screen_width, screen_height
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Flappy Bird RL")
+
+        self.font = pygame.font.Font("assets/04B_19.TTF", 30)
 
         self.clock = pygame.time.Clock()
         self.running = True
@@ -127,9 +126,12 @@ class Game:
 
     def draw_score(self):
         """Render and display the score on the screen."""
-        font = pygame.font.Font("assets/04B_19.TTF", 30)
-        score_surface = font.render(f'Score: {self.score}', True, (255, 255, 255))
+        score_surface = self.font.render(f'Score: {self.score}', True, (255, 255, 255))
         self.screen.blit(score_surface, (10, 10))
+
+    def draw_text(self, text, pos, color):
+        text_surface = self.font.render(text, True, color)
+        self.screen.blit(text_surface, pos)
 
     def reward(self):
         """Calculate reward."""
@@ -153,7 +155,7 @@ class Game:
         return (self.bird.rect.y, 0, 0, 1)
 
     def run_step(self, action):
-        """Run a single step of the game and return the state, reward, done status, and captured image."""
+        """Run a single step of the game and return the state, reward, done status"""
         state, reward, done = self.update(action)
         return state, reward, done
 
@@ -162,7 +164,7 @@ class Game:
         while self.running:
             self.handle_events()
             self.update(1)
-            self.render()
+            #self.render()
             self.clock.tick(60)
 
         pygame.quit()

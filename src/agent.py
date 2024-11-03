@@ -69,11 +69,14 @@ class Agent:
         self.Qtable = np.load("q_table.npy")
     
     def exploit(self, env):            
-        env.reset_game()
-        state = env.state()
-        done = False
+        for i in range(100):
+            env.reset_game()
+            state = env.state()
+            done = False
 
-        while not done:
-            state_index = self.get_state_index(state)
-            action = self.greedy_policy(self.Qtable,state_index)
-            new_state, reward, done = env.run_step(action)
+            while not done:
+                state_index = self.get_state_index(state)
+                action = self.greedy_policy(state_index)
+                new_state, reward, done = env.run_step(action)
+                env.render()
+                self.clock.tick(60)
